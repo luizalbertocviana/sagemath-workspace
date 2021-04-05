@@ -76,3 +76,29 @@ def create_model(g: Graph, root: int, d: DiGraph, lb_dep: dict, ub_dep: dict) ->
     model.minimize(sum(w * x[u, v] for (u, v, w) in g.edge_iterator()))
 
     return model
+
+class solving_info:
+    sol               = None
+    time              = None
+    gap               = None
+    best_int_solution = None
+    best_upper_bound  = None
+    number_nodes      = None
+    number_iterat     = None
+    status            = None
+
+def solve_model(model: Model) -> solving_info:
+    solution = model.solve()
+
+    info = solving_info()
+
+    info.sol               = solution
+    info.time              = solution.solve_details.time
+    info.gap               = solution.solve_details.mip_relative_gap * 100
+    info.best_int_solution = solution.objective_value
+    info.best_upper_bound  = solution.solve_details.best_bound
+    info.number_nodes      = solution.solve_details.nb_nodes_processed
+    info.number_iterat     = solution.solve_details.nb_iterations
+    info.status            = solution.solve_details.status
+
+    return info

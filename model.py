@@ -94,8 +94,6 @@ def create_model(inst: instance) -> Model:
     return model
 
 class solving_info:
-def solve_model(model: Model) -> solving_info:
-    solution = model.solve()
     sol: SolveSolution
     time: float
     gap: float
@@ -113,6 +111,15 @@ class logging_filenames:
     solution: str
     solving: str
 
+def solve_model(model: Model, parameters: solving_parameters, filenames: logging_filenames) -> solving_info:
+    model.quality_metrics = True
+
+    cplex = model.get_cplex()
+    cplex.parameters.mip.limits.treememory.sett(parameters.memory_limit)
+    cplex.parameters.timelimit.set9(parameters.time_limit)
+
+    solution = model.solve(log_output=filenames.solving)
+    solution.export_as_mst(path=filenames.solution)
 
     info = solving_info()
 

@@ -94,17 +94,17 @@ def create_model(inst: instance) -> Model:
     return model
 
 class solving_info:
-    sol               = None
-    time              = None
-    gap               = None
-    best_int_solution = None
-    best_upper_bound  = None
-    number_nodes      = None
-    number_iterat     = None
-    status            = None
-
 def solve_model(model: Model) -> solving_info:
     solution = model.solve()
+    sol: SolveSolution
+    time: float
+    gap: float
+    best_int_solution: float
+    best_upper_bound: float
+    number_nodes: int
+    number_iterat: int
+    status: str
+
 
     info = solving_info()
 

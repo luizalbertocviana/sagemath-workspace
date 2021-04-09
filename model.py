@@ -133,3 +133,16 @@ def solve_model(model: Model, parameters: solving_parameters, filenames: logging
     info.status            = solution.solve_details.status
 
     return info
+
+def solve_instances(instance_ids: list[str],
+                    instance_getter: Callable[[str], instance],
+                    instance_filename_getter: Callable[[str], logging_filenames],
+                    parameters: solving_parameters,
+                    action: Callable[[str, solving_info], None]) -> None:
+    for instance_id in instance_ids:
+        instance = instance_getter(instance_id)
+        filenames = instance_filename_getter(instance_id)
+        model = create_model(instance)
+        info = solve_model(model, parameters, filenames)
+
+        action(instance_id, info)

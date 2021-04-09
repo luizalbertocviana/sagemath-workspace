@@ -6,6 +6,13 @@ from docplex.mp.solution import SolveSolution
 from docplex.mp.model import Model
 
 def create_model(g: Graph, root: int, d: DiGraph, lb_dep: dict, ub_dep: dict) -> Model:
+class instance:
+    graph: Graph
+    root: int
+    digraph: DiGraph
+    lb_dep: dict
+    ub_dep: dict
+
     model = Model()
 
     # number of vertices

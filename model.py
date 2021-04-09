@@ -105,6 +105,14 @@ def solve_model(model: Model) -> solving_info:
     number_iterat: int
     status: str
 
+class solving_parameters:
+    memory_limit: int
+    time_limit: int
+
+class logging_filenames:
+    solution: str
+    solving: str
+
 
     info = solving_info()
 

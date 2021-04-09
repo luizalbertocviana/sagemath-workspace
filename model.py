@@ -1,5 +1,8 @@
+from typing import Callable
+
 from sage.all import Graph, DiGraph
 
+from docplex.mp.solution import SolveSolution
 from docplex.mp.model import Model
 
 def create_model(g: Graph, root: int, d: DiGraph, lb_dep: dict, ub_dep: dict) -> Model:

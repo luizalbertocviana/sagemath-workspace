@@ -5,13 +5,19 @@ from sage.all import Graph, DiGraph
 from docplex.mp.solution import SolveSolution
 from docplex.mp.model import Model
 
-def create_model(g: Graph, root: int, d: DiGraph, lb_dep: dict, ub_dep: dict) -> Model:
 class instance:
     graph: Graph
     root: int
     digraph: DiGraph
     lb_dep: dict
     ub_dep: dict
+
+def create_model(inst: instance) -> Model:
+    g      = inst.graph
+    d      = inst.digraph
+    root   = inst.root
+    lb_dep = inst.lb_dep
+    ub_dep = inst.ub_dep
 
     model = Model()
 

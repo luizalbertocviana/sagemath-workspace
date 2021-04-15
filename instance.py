@@ -28,7 +28,7 @@ def read_digraph(filename: str) -> DiGraph:
 
     return d
 
-def read_dep_bounds(filename: str) -> tuple:
+def read_dep_bounds(filename: str) -> Tuple[Dict[Tuple[int, int], int], Dict[Tuple[int, int], int]]:
     lb_dep = dict()
     ub_dep = dict()
 
@@ -41,9 +41,16 @@ def read_dep_bounds(filename: str) -> tuple:
 
     return (lb_dep, ub_dep)
 
-def read_instance(g_filename: str, d_filename: str, b_filename: str) -> tuple:
+def read_instance(g_filename: str, d_filename: str, b_filename: str) -> instance:
     g = read_graph(g_filename)
     d = read_digraph(d_filename)
     lb_dep, ub_dep = read_dep_bounds(b_filename)
 
-    return (g, d, lb_dep, ub_dep)
+    inst = instance()
+
+    inst.graph = g
+    inst.digraph = d
+    inst.lb_dep = lb_dep
+    inst.ub_dep = ub_dep
+
+    return inst

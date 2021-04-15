@@ -1,16 +1,9 @@
-from typing import Callable
-
-from sage.all import Graph, DiGraph
+from typing import  Dict, Tuple
 
 from docplex.mp.solution import SolveSolution
 from docplex.mp.model import Model
 
-class instance:
-    graph: Graph
-    root: int
-    digraph: DiGraph
-    lb_dep: dict
-    ub_dep: dict
+from .instance import instance
 
 def create_model(inst: instance) -> Model:
     g      = inst.graph
@@ -93,56 +86,3 @@ def create_model(inst: instance) -> Model:
 
     return model
 
-class solving_info:
-    sol: SolveSolution
-    time: float
-    gap: float
-    best_int_solution: float
-    best_upper_bound: float
-    number_nodes: int
-    number_iterat: int
-    status: str
-
-class solving_parameters:
-    memory_limit: int
-    time_limit: int
-
-class logging_filenames:
-    solution: str
-    solving: str
-
-def solve_model(model: Model, parameters: solving_parameters, filenames: logging_filenames) -> solving_info:
-    model.quality_metrics = True
-
-    cplex = model.get_cplex()
-    cplex.parameters.mip.limits.treememory.sett(parameters.memory_limit)
-    cplex.parameters.timelimit.set9(parameters.time_limit)
-
-    solution = model.solve(log_output=filenames.solving)
-    solution.export_as_mst(path=filenames.solution)
-
-    info = solving_info()
-
-    info.sol               = solution
-    info.time              = solution.solve_details.time
-    info.gap               = solution.solve_details.mip_relative_gap * 100
-    info.best_int_solution = solution.objective_value
-    info.best_upper_bound  = solution.solve_details.best_bound
-    info.number_nodes      = solution.solve_details.nb_nodes_processed
-    info.number_iterat     = solution.solve_details.nb_iterations
-    info.status            = solution.solve_details.status
-
-    return info
-
-def solve_instances(instance_ids: list[str],
-                    instance_getter: Callable[[str], instance],
-                    instance_filename_getter: Callable[[str], logging_filenames],
-                    parameters: solving_parameters,
-                    action: Callable[[str, solving_info], None]) -> None:
-    for instance_id in instance_ids:
-        instance = instance_getter(instance_id)
-        filenames = instance_filename_getter(instance_id)
-        model = create_model(instance)
-        info = solve_model(model, parameters, filenames)
-
-        action(instance_id, info)

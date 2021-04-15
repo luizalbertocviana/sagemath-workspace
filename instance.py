@@ -1,4 +1,13 @@
+from typing import Dict, Tuple
+
 from sage.all import Graph, DiGraph
+
+class instance:
+    graph: Graph
+    root: int
+    digraph: DiGraph
+    lb_dep: Dict[Tuple[int, int], int]
+    ub_dep: Dict[Tuple[int, int], int]
 
 def read_graph(filename: str) -> Graph:
     g_file = open(filename)

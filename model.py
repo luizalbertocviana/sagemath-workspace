@@ -1,9 +1,28 @@
 from typing import  Dict, Tuple
+from docplex.mp.linear import Var
 
 from docplex.mp.solution import SolveSolution
 from docplex.mp.model import Model
 
 from .instance import instance
+
+class solving_info:
+    sol: SolveSolution
+    time: float
+    gap: float
+    best_int_solution: float
+    best_upper_bound: float
+    number_nodes: int
+    number_iterat: int
+    status: str
+
+class solving_parameters:
+    memory_limit: int
+    time_limit: int
+
+class logging_filenames:
+    solution: str
+    solving: str
 
 def create_model(inst: instance) -> Model:
     g      = inst.graph

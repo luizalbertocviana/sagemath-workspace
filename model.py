@@ -15,20 +15,20 @@ def create_model(inst: instance) -> Model:
     model = Model()
 
     # number of vertices
-    n = g.num_verts()
+    n: int = g.num_verts()
 
     # establishes relations (back and forth) between the edges of g and the vertices
     # of d, that is, edge e of g corresponds to vertex e_to_index[e] of d
-    e_to_index = dict()
-    index_to_e = dict()
+    e_to_index: Dict[Tuple[int, int], int] = dict()
+    index_to_e: Dict[int, Tuple[int, int]] = dict()
     for (idx, (u, v)) in enumerate(g.edge_iterator(labels=False)):
         e_to_index[u, v] = idx
         index_to_e[idx] = (u, v)
 
     # model variables:
-    x = dict() # binary variables, one for each edge
-    y = dict() # binary variables, for each edge uv we have y_uv and y_vu
-    l = dict() # nonnegative continuous variables, one for each vertex
+    x: Dict[Tuple[int, int], Var] = dict() # binary variables, one for each edge
+    y: Dict[Tuple[int, int], Var] = dict() # binary variables, for each edge uv we have y_uv and y_vu
+    l: Dict[int, Var] = dict() # nonnegative continuous variables, one for each vertex
 
     # creating x and y variables
     for (u, v) in g.edge_iterator(labels=False):
@@ -75,7 +75,7 @@ def create_model(inst: instance) -> Model:
             sum(x[index_to_e[dep_idx]] for dep_idx in d.neighbor_in_iterator(e_to_index[u, v]))
             >= lb_dep[u, v] * x[u, v])
         # \sum_{e2 \in dep(e1)} x_e2 <= |dep(e1)| - (|dep(e1)| - u(e1))x_e1 
-        num_deps = d.in_degree(e_to_index[u, v])
+        num_deps: int = d.in_degree(e_to_index[u, v])
         model.add_constraint(
             sum(x[index_to_e[dep_idx]] for dep_idx in d.neighbor_in_iterator(e_to_index[u, v]))
             <= num_deps - (num_deps - ub_dep[u, v]) * x[u, v] )

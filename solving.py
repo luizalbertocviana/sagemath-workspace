@@ -113,3 +113,74 @@ def solve_instances_write_table(instance_ids: List[str],
 
     solve_instances(instance_ids, instance_getter, instance_filename_getter, parameters, register_into_table)
 
+def get_instance_filenames(instance_id: str) -> Tuple[str, str, str]:
+    graph_filename: str   = "G_" + instance_id
+    digraph_filename: str = "D_" + instance_id
+    bounds_filename: str  = "B_" + instance_id
+
+    return (graph_filename, digraph_filename, bounds_filename)
+
+def get_instance_from_id(instance_id: str) -> instance:
+    graph_filename, digraph_filename, bounds_filename = get_instance_filenames(instance_id)
+
+    return read_instance(graph_filename, digraph_filename, bounds_filename)
+
+def get_instance_from_directory_and_id(directory: str, instance_id: str) -> instance:
+    filenames = get_instance_filenames(instance_id)
+
+    complete_filenames = [directory + "/" + filename for filename in filenames]
+
+    return read_instance(complete_filenames[0], complete_filenames[1], complete_filenames[2])
+
+def get_log_filenames_from_id(instance_id: str) -> logging_filenames:
+    filenames = logging_filenames()
+
+    filenames.solution = "SOL_" + instance_id
+    filenames.solving = "LOG_" + instance_id
+
+    return filenames
+
+def solve_instances_directory(directory: str, parameters: solving_parameters, output_dir = "solving") -> None:
+    instance_id_filename = "instance_ids"
+
+    module_instance_ids_name = directory + "." + instance_id_filename
+
+    module_instance_ids = __import__(module_instance_ids_name)
+
+    instance_ids: List[str] = module_instance_ids.instance_ids.get_instance_ids()
+
+    if not exists(output_dir):
+        mkdir(directory + "/" + output_dir)
+
+    table_filename = directory + "/" + output_dir + "/" + "results.csv"
+
+    def get_instance(instance_id: str) -> instance:
+        return get_instance_from_directory_and_id(directory, instance_id)
+
+    def get_filenames(instance_id: str) -> logging_filenames:
+        lf = get_log_filenames_from_id(instance_id)
+
+        lf.solution = directory + "/" + output_dir + "/" + lf.solution
+        lf.solving = directory + "/" + output_dir + "/" + lf.solving
+
+        return lf
+
+    solve_instances_write_table(instance_ids, table_filename, get_instance, get_filenames, parameters)
+
+def solve_instances_directories(directories: List[str]) -> None:
+    pars = solving_parameters()
+
+    # bytes
+    pars.memory_limit = 32 * 1024 * 1024 * 1024 # 32 GB
+    # seconds
+    pars.time_limit = 2 * 60 * 60 # 2 hours
+
+    for directory in directories:
+        solve_instances_directory(directory, pars)
+
+def solve_instances() -> None:
+    num_generators = 20
+
+    dirs = ["generator%d" % i for i in range(1, num_generators + 1)]
+
+    solve_instances_directories(dirs)

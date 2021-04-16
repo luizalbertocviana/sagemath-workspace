@@ -96,8 +96,20 @@ def register_instance_info(table: pd.DataFrame, instance_id: str, info: solving_
 
     table.loc[instance_id] = line
 
-def treat_instances(instance_ids: List[str], table_filename: str):
+def solve_instances_write_table(instance_ids: List[str],
+                                table_filename: str,
+                                instance_getter: Callable[[str], instance],
+                                instance_filename_getter: Callable[[str], logging_filenames],
+                                parameters: solving_parameters):
     if exists(table_filename):
         table = load_table(table_filename)
     else:
         table = create_table()
+
+    def register_into_table(instance_id: str, info: solving_info):
+        register_instance_info(table, instance_id, info)
+
+        save_table(table, table_filename)
+
+    solve_instances(instance_ids, instance_getter, instance_filename_getter, parameters, register_into_table)
+

@@ -91,14 +91,10 @@ def save_table(table: pd.DataFrame, filename: str) -> None:
 def load_table(filename: str) -> pd.DataFrame:
     return pd.read_csv(filename)
 
-def register_instance_info(table_filename: str, instance_id: str, info: solving_info) -> None:
-    table = load_table(table_filename)
-
+def register_instance_info(table: pd.DataFrame, instance_id: str, info: solving_info) -> None:
     line = (info.time, info.gap,info.best_int_solution, info.best_upper_bound, info.number_nodes, info.number_iterat, info.status)
 
     table.loc[instance_id] = line
-
-    save_table(table, table_filename)
 
 def treat_instances(instance_ids: List[str], table_filename: str):
     if exists(table_filename):

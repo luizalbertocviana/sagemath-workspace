@@ -1,14 +1,15 @@
 import multiprocessing as mp
+from os import mkdir
 from os.path import exists
 
-from typing import Callable, List
+from typing import Callable, List, Tuple
 from cplex import Cplex
 from docplex.mp.model import Model
 from docplex.mp.solution import SolveSolution
 
 import pandas as pd
 
-from .instance import instance
+from .instance import instance, read_instance
 from .model import create_model
 
 class logging_filenames:

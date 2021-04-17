@@ -170,8 +170,8 @@ def solve_instances_directory(directory: str, parameters: solving_parameters, ou
 def solve_instances_directories(directories: List[str]) -> None:
     pars = solving_parameters()
 
-    # bytes
-    pars.memory_limit = 32 * 1024 * 1024 * 1024 # 32 GB
+    # megabytes
+    pars.memory_limit = 32 * 1024 # 32 GB
     # seconds
     pars.time_limit = 2 * 60 * 60 # 2 hours
 

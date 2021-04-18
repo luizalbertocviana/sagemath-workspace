@@ -120,7 +120,12 @@ def solve_instances_write_table(instance_ids: List[str],
 
         save_table(table, table_filename)
 
-    solve_instances(instance_ids, instance_getter, instance_filename_getter, parameters, register_into_table)
+    def unsolved(instance_id: str) -> bool:
+        return instance_id not in table.index
+
+    unsolved_instance_ids = list(filter(unsolved, instance_ids))
+
+    solve_instances(unsolved_instance_ids, instance_getter, instance_filename_getter, parameters, register_into_table)
 
 def get_instance_filenames(instance_id: str) -> Tuple[str, str, str]:
     graph_filename: str   = "G_" + instance_id

@@ -61,23 +61,24 @@ def solve_instances(instance_ids: List[str],
                     instance_filename_getter: Callable[[str], logging_filenames],
                     parameters: solving_parameters,
                     action: Callable[[str, solving_info], None]) -> None:
-    def solve_model_subprocess(model: Model, parameters: solving_parameters, filenames: logging_filenames, q: mp.Queue) -> None:
+    def solve_model_subprocess(model: Model, parameters: solving_parameters, filenames: logging_filenames, return_dict) -> None:
         info = solve_model(model, parameters, filenames)
 
-        q.put(info)
+        return_dict['info'] = info
 
-    queue: mp.Queue[solving_info] = mp.Queue()
+    manager = mp.Manager()
+    return_dict = manager.dict()
 
     for instance_id in instance_ids:
         instance  = instance_getter(instance_id)
         filenames = instance_filename_getter(instance_id)
         model     = create_model(instance)
 
-        subprocess = mp.Process(target=solve_model_subprocess, args=(model, parameters, filenames, queue))
+        subprocess = mp.Process(target=solve_model_subprocess, args=(model, parameters, filenames, return_dict))
         subprocess.start()
         subprocess.join()
 
-        info = queue.get()
+        info = return_dict['info']
 
         action(instance_id, info)
 

@@ -115,7 +115,7 @@ def solve_instances_write_table(instance_ids: List[str],
     else:
         table = create_table()
 
-    def register_into_table(instance_id: str, info: solving_info):
+    def register_into_table(instance_id: str, info: solving_info) -> None:
         register_instance_info(table, instance_id, info)
 
         save_table(table, table_filename)

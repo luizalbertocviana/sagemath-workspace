@@ -37,6 +37,10 @@ def solve_model(model: Model, parameters: solving_parameters, filenames: logging
     cplex.parameters.timelimit.set(parameters.time_limit)
 
     solution: SolveSolution = model.solve(log_output=filenames.solving)
+
+    if not exists(filenames.solution):
+        mkdir(filenames.solution)
+
     solution.export_as_mst(path=filenames.solution)
 
     info = solving_info()

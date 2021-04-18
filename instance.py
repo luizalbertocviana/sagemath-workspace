@@ -59,6 +59,7 @@ def read_instance(g_filename: str, d_filename: str, b_filename: str) -> instance
 
     inst.graph = g
     inst.digraph = d
+    inst.root = 0
     inst.lb_dep = lb_dep
     inst.ub_dep = ub_dep
 

@@ -21,7 +21,6 @@ class solving_parameters:
     time_limit: int
 
 class solving_info:
-    sol: SolveSolution
     time: float
     gap: float
     best_int_solution: float
@@ -42,7 +41,6 @@ def solve_model(model: Model, parameters: solving_parameters, filenames: logging
 
     info = solving_info()
 
-    info.sol               = solution
     info.time              = solution.solve_details.time
     info.gap               = solution.solve_details.mip_relative_gap * 100
     info.best_int_solution = solution.objective_value

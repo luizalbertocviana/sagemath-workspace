@@ -31,7 +31,7 @@ def create_model(inst: instance) -> Model:
     lb_dep = inst.lb_dep
     ub_dep = inst.ub_dep
 
-    model = Model()
+    model = Model("MTZ")
 
     # number of vertices
     n: int = g.num_verts()

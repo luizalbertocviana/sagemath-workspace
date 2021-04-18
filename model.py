@@ -83,9 +83,9 @@ def create_model(inst: instance) -> Model:
     # l_u - l_v + 1 <= (|V(G)| - d(r, v))(1 - y_uv)
     for (u, v) in g.edge_iterator(labels=False):
         if v != root:
-            model.add_constraint(l[u] - l[v] + 1 <= (n - g.distance(root, v))(1 - y[u, v]))
+            model.add_constraint(l[u] - l[v] + 1 <= (n - g.distance(root, v)) * (1 - y[u, v]))
         if u != root:
-            model.add_constraint(l[v] - l[u] + 1 <= (n - g.distance(root, u))(1 - y[v, u]))
+            model.add_constraint(l[v] - l[u] + 1 <= (n - g.distance(root, u)) * (1 - y[v, u]))
 
     # dependency constraints
     for (u, v) in g.edge_iterator(labels=False):

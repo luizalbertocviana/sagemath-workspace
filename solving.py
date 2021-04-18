@@ -194,7 +194,7 @@ def solve_instances_directories(directories: List[str]) -> None:
     for directory in directories:
         solve_instances_directory(directory, pars)
 
-def solve_instances() -> None:
+def solve_instances_all_directories() -> None:
     num_generators = 20
 
     dirs = ["generator%d" % i for i in range(1, num_generators + 1)]

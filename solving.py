@@ -92,7 +92,7 @@ def save_table(table: pd.DataFrame, filename: str) -> None:
     table.to_csv(filename)
 
 def load_table(filename: str) -> pd.DataFrame:
-    return pd.read_csv(filename)
+    return pd.read_csv(filename, index_col=0)
 
 def register_instance_info(table: pd.DataFrame, instance_id: str, info: solving_info) -> None:
     line = (info.time, info.gap,info.best_int_solution, info.best_upper_bound, info.number_nodes, info.number_iterat, info.status)

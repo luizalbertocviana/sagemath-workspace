@@ -95,7 +95,13 @@ def load_table(filename: str) -> pd.DataFrame:
     return pd.read_csv(filename, index_col=0)
 
 def register_instance_info(table: pd.DataFrame, instance_id: str, info: solving_info) -> None:
-    line = (info.time, info.gap,info.best_int_solution, info.best_upper_bound, info.number_nodes, info.number_iterat, info.status)
+    line = {"time"              : info.time,
+            "gap"               : info.gap,
+            "best_int_solution" : info.best_int_solution,
+            "best_upper_bound"  : info.best_upper_bound,
+            "number_nodes"      : info.number_nodes,
+            "number_iterat"     : info.number_iterat,
+            "status"            : info.status}
 
     table.loc[instance_id] = line
 

@@ -163,10 +163,12 @@ def solve_instances_directory(directory: str, parameters: solving_parameters, ou
 
     instance_ids: List[str] = module_instance_ids.instance_ids.get_instance_ids()
 
-    if not exists(output_dir):
-        mkdir(directory + "/" + output_dir)
+    target_output_dir: str = directory + "/" + output_dir
 
-    table_filename = directory + "/" + output_dir + "/" + "results.csv"
+    if not exists(target_output_dir):
+        mkdir(target_output_dir)
+
+    table_filename = target_output_dir + "/" + "results.csv"
 
     def get_instance(instance_id: str) -> instance:
         return get_instance_from_directory_and_id(directory, instance_id)
@@ -174,8 +176,8 @@ def solve_instances_directory(directory: str, parameters: solving_parameters, ou
     def get_filenames(instance_id: str) -> logging_filenames:
         lf = get_log_filenames_from_id(instance_id)
 
-        lf.solution = directory + "/" + output_dir + "/" + lf.solution
-        lf.solving = directory + "/" + output_dir + "/" + lf.solving
+        lf.solution = target_output_dir + "/" + lf.solution
+        lf.solving = target_output_dir + "/" + lf.solving
 
         return lf
 

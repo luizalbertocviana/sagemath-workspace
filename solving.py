@@ -40,18 +40,27 @@ def solve_model(model: Model, parameters: solving_parameters, filenames: logging
     if not exists(filenames.solution):
         mkdir(filenames.solution)
 
-    solution.export_as_mst(path=filenames.solution)
+    if solution:
+        solution.export_as_mst(path=filenames.solution)
 
     info = solving_info()
+    info.time              = None
+    info.gap               = None
+    info.best_int_solution = None
+    info.best_upper_bound  = None
+    info.number_nodes      = None
+    info.number_iterat     = None
+    info.status            = None
 
-    info.time              = solution.solve_details.time
-    info.gap               = solution.solve_details.mip_relative_gap * 100
-    info.best_int_solution = solution.objective_value
-    info.best_upper_bound  = solution.solve_details.best_bound
-    info.number_nodes      = solution.solve_details.nb_nodes_processed
-    info.number_iterat     = solution.solve_details.nb_iterations
-    info.status            = solution.solve_details.status
-    #TODO include root gap
+    if solution:
+        info.time              = solution.solve_details.time
+        info.gap               = solution.solve_details.mip_relative_gap * 100
+        info.best_int_solution = solution.objective_value
+        info.best_upper_bound  = solution.solve_details.best_bound
+        info.number_nodes      = solution.solve_details.nb_nodes_processed
+        info.number_iterat     = solution.solve_details.nb_iterations
+        info.status            = solution.solve_details.status
+        #TODO include root gap
 
     return info
 

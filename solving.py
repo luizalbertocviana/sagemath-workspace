@@ -32,9 +32,8 @@ class solving_info:
 def solve_model(model: Model, parameters: solving_parameters, filenames: logging_filenames) -> solving_info:
     model.quality_metrics = True
 
-    cplex: Cplex = model.get_cplex()
-    cplex.parameters.mip.limits.treememory.set(parameters.memory_limit)
-    cplex.parameters.timelimit.set(parameters.time_limit)
+    model.parameters.timelimit             = parameters.time_limit
+    model.parameters.mip.limits.treememory = parameters.memory_limit
 
     solution: SolveSolution = model.solve(log_output=filenames.solving)
 
